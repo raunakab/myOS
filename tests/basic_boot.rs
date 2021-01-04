@@ -1,7 +1,10 @@
+// #![allow(unused)]
+
 #![no_std]
 #![no_main]
 #![feature(custom_test_frameworks)]
-#![test_runner(crate::test_runner)]
+#![test_runner(myOS::test_framework::test_runner)]
+// #![test_runner(myOS::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
@@ -13,11 +16,12 @@ pub extern "C" fn _start() -> ! {
     loop {}
 }
 
-fn test_runner(tests: &[&dyn Fn()]) {
+fn test_runner(tests: &[&dyn Fn()]) -> () {
     unimplemented!();
 }
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    loop {}
+    // myOS::panic::test_panic_handler(info)
+    myOS::test_panic_handler(info)
 }

@@ -3,29 +3,17 @@
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_framework::test_runner)]
+// #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-// external crates
 use core::panic::PanicInfo;
 
 // internal modules
-mod vga_buffer;
-mod panic;
-mod serial;
-mod qemu;
-mod test_framework;
-
-use qemu::{
-    QemuExitCode,
-    exit_qemu,
-};
-
-pub fn test_panic_handler(info: &PanicInfo) -> ! {
-    serial_println!("[failed]\n");
-    serial_println!("Error: {}\n", info);
-    exit_qemu(QemuExitCode::Failed);
-    loop {}
-}
+pub mod vga_buffer;
+pub mod serial;
+pub mod test_framework;
+pub mod qemu;
+// pub mod panic;
 
 /// Entry point for `cargo test`
 #[cfg(test)]
@@ -39,4 +27,17 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)
+}
+
+pub fn test_panic_handler(info: &PanicInfo) -> ! {
+    use crate::qemu::{
+        QemuExitCode,
+        exit_qemu,
+    };
+
+    serial_println!("[failed]\n");
+    serial_println!("Error: {}\n", info);
+    exit_qemu(QemuExitCode::Failed);
+
+    loop {}
 }

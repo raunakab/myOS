@@ -6,6 +6,7 @@ pub enum QemuExitCode {
     Success = 0x10u32,
     Failed = 0x11u32,
 }
+
 pub fn exit_qemu(exit_code: QemuExitCode) -> () {
     use x86_64::instructions::port::Port;
     unsafe {

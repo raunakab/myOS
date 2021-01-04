@@ -4,7 +4,9 @@ use lazy_static::lazy_static;
 
 lazy_static! {
     pub static ref SERIAL1: Mutex::<SerialPort> = {
-        let mut serial_port: SerialPort = unsafe { SerialPort::new(0x3f8u16) };
+        let mut serial_port: SerialPort = unsafe {
+            SerialPort::new(0x3f8u16)
+        };
         serial_port.init();
 
         Mutex::new(serial_port)

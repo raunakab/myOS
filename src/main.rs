@@ -2,25 +2,51 @@
 #![no_std] // don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
 #![feature(custom_test_frameworks)]
-#![test_runner(crate::test_framework::test_runner)]
+#![test_runner(myOS::test_framework::test_runner)]
+// #![test_runner(myOS::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-mod vga_buffer;
-mod panic;
-mod serial;
-mod qemu;
-mod test_framework;
+// mod vga_buffer;
+// mod panic;
+// mod serial;
+// mod qemu;
+// mod test_framework;
 
-#[no_mangle] // don't mangle the name of this function
+// #[no_mangle] // don't mangle the name of this function
+// pub extern "C" fn _start() -> ! {
+//     println!("Hello world{}", "!");
+
+//     #[cfg(test)]
+//     test_main();
+
+//     loop {}
+// }
+
+use core::panic::PanicInfo;
+use myOS::println;
+
+#[no_mangle]
 pub extern "C" fn _start() -> ! {
-    println!("{}, {}{}", "Hello", "world", "!");
-    let s: &str = "Some";
-    println!("{}", s);
+    println!("Hello World{}", "!");
 
     #[cfg(test)]
     test_main();
 
     loop {}
+}
+
+/// This function is called on panic.
+#[cfg(not(test))]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    println!("{}", info);
+    loop {}
+}
+
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    myOS::test_panic_handler(info)
 }
 
 // mod test_vga_buffer {

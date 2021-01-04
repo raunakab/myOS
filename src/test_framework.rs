@@ -14,20 +14,6 @@ use crate::qemu::{
     exit_qemu,
 };
 
-// #[cfg(test)]
-// pub fn test_runner(tests: &[&dyn Testable]) -> () {
-//     serial_println!("Running {} tests", tests.len());
-//     for test in tests {
-//         test.run();
-//     }
-
-    // use crate::qemu::{
-    //     QemuExitCode,
-    //     exit_qemu,
-    // };
-//     exit_qemu(QemuExitCode::Success);
-// }
-
 pub fn test_runner(tests: &[&dyn Testable]) {
     serial_println!("Running {} tests", tests.len());
     for test in tests {
