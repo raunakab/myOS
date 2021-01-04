@@ -3,24 +3,7 @@
 #![no_main] // disable all Rust-level entry points
 #![feature(custom_test_frameworks)]
 #![test_runner(myOS::test_framework::test_runner)]
-// #![test_runner(myOS::test_runner)]
 #![reexport_test_harness_main = "test_main"]
-
-// mod vga_buffer;
-// mod panic;
-// mod serial;
-// mod qemu;
-// mod test_framework;
-
-// #[no_mangle] // don't mangle the name of this function
-// pub extern "C" fn _start() -> ! {
-//     println!("Hello world{}", "!");
-
-//     #[cfg(test)]
-//     test_main();
-
-//     loop {}
-// }
 
 use core::panic::PanicInfo;
 use myOS::println;
@@ -35,7 +18,6 @@ pub extern "C" fn _start() -> ! {
     loop {}
 }
 
-/// This function is called on panic.
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
@@ -46,7 +28,7 @@ fn panic(info: &PanicInfo) -> ! {
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    myOS::test_panic_handler(info)
+    myOS::panic::test_panic_handler(info)
 }
 
 // mod test_vga_buffer {

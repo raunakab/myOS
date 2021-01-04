@@ -3,7 +3,6 @@
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![test_runner(crate::test_framework::test_runner)]
-// #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
@@ -13,9 +12,8 @@ pub mod vga_buffer;
 pub mod serial;
 pub mod test_framework;
 pub mod qemu;
-// pub mod panic;
+pub mod panic;
 
-/// Entry point for `cargo test`
 #[cfg(test)]
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
@@ -26,18 +24,5 @@ pub extern "C" fn _start() -> ! {
 #[cfg(test)]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-    test_panic_handler(info)
-}
-
-pub fn test_panic_handler(info: &PanicInfo) -> ! {
-    use crate::qemu::{
-        QemuExitCode,
-        exit_qemu,
-    };
-
-    serial_println!("[failed]\n");
-    serial_println!("Error: {}\n", info);
-    exit_qemu(QemuExitCode::Failed);
-
-    loop {}
+    panic::test_panic_handler(info)
 }
