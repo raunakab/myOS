@@ -29,6 +29,10 @@ test-args = [
     "-serial", "stdio",
     "-display", "none"
 ]
-test-timeout = 20
 
+test-timeout = 20
 test-success-exit-code = 33
+
+# [[test]]
+# name = "should_panic"
+# harness = false
